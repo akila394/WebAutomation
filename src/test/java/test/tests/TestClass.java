@@ -57,7 +57,7 @@ public class TestClass {
     }
 
     @Test
-    public void fillFormtest() throws InterruptedException {
+    public void fillFormtest()  {
         //Given
 
         //When
@@ -81,13 +81,30 @@ public class TestClass {
 
         Assertions.assertEquals("Thanks for your feedback Akila Herath",
                 driver.findElement(By.cssSelector("[class='snackbar popup-message mr-auto']")).getText());
+    }
+
+    @Test
+    public void planetsTest()
+    {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.findElement(By.cssSelector("[aria-label='planets']")).click();
+
+        List<WebElement> planetNames = driver.findElements(By.cssSelector("h2[class='name headline primary--text']"));
+        List<WebElement> planets = driver.findElements(By.cssSelector("[class='v-btn__content']"));
 
 
+        for(WebElement planet: planets ){
+            for(WebElement planetName : planetNames){
+                if(planet.getText().equalsIgnoreCase("Explore")){
+                    if(planetName.getText().equalsIgnoreCase("Earth")){
+                        planet.click();
+                        break;
+                    }
 
+                }
+            }
 
-
-
-
+        }
     }
 
     @Test
