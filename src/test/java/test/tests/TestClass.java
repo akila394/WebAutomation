@@ -1,17 +1,12 @@
 package test.tests;
-
 import org.junit.jupiter.api.*;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
-//import org.openqa.selenium.WebDriver;
-//import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import test.modules.Form;
+import test.modules.Planet;
 
 import java.time.Duration;
 import java.util.List;
@@ -19,6 +14,7 @@ import java.util.List;
 public class TestClass {
 
     private WebDriver driver;
+    private WebElement webelement;
 
     @BeforeEach
     public void setup()
@@ -44,18 +40,6 @@ public class TestClass {
         String expectedtext = forenamesubmittext.getText();
         Assertions.assertEquals(actualtext,expectedtext);
     }
-
-    @Test
-    public void loginButtonTest() throws InterruptedException {
-        //given
-
-        //when
-        driver.findElement(By.id("loginButton")).click();
-
-        //then
-
-    }
-
     @Test
     public void fillFormtest()  {
         //Given
@@ -71,52 +55,90 @@ public class TestClass {
         form.selectAgree();
         form.submit();
 
-        //Then
-//        By ByPopupMessage = By.className("popup message");
-//        new WebDriverWait(driver, Duration.ofSeconds(10)).until(
-//                ExpectedConditions.visibilityOfElementLocated(ByPopupMessage));
-//
-//        //Assertions.assertEquals("Thanks for your feedback", textElement);
-        //Thread.sleep(3000);
-
         Assertions.assertEquals("Thanks for your feedback Akila Herath",
                 driver.findElement(By.cssSelector("[class='snackbar popup-message mr-auto']")).getText());
     }
 
     @Test
-    public void planetsTest()
-    {
+    public void planetsTest() throws InterruptedException {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.findElement(By.cssSelector("[aria-label='planets']")).click();
 
         List<WebElement> planetNames = driver.findElements(By.cssSelector("h2[class='name headline primary--text']"));
-        List<WebElement> planets = driver.findElements(By.cssSelector("[class='v-btn__content']"));
 
 
-        for(WebElement planet: planets ){
-            for(WebElement planetName : planetNames){
-                if(planet.getText().equalsIgnoreCase("Explore")){
-                    if(planetName.getText().equalsIgnoreCase("Earth")){
-                        planet.click();
-                        break;
-                    }
 
-                }
-            }
+//        for(WebElement planet: planets ) {
+
+
+
 
         }
+
+
+    @Test
+    public void neptuneTest() throws InterruptedException {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.findElement(By.cssSelector("[aria-label='planets']")).click();
+
+        var planetcards = driver.findElements(By.className("planet"));
+
+        for(WebElement planetcard: planetcards)
+        {
+            String name = planetcard.findElement(By.className("name")).getText();
+            if (name.equalsIgnoreCase("Earth")){
+                planetcard.findElement(By.tagName("button")).click();
+            }
+        }
+
+        Thread.sleep(2000);
     }
 
     @Test
-//    public void loginButtonTest() throws InterruptedException {
-//        //given
-//
-//        //when
-//        driver.findElement(By.id("loginButton")).click();
-//
-//        //then
-//
-//    }
+    public void neptuneTest2()  {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        driver.findElement(By.cssSelector("[aria-label='planets']")).click();
+        Planet planet = new Planet(driver);
+        planet.clickExplore("Earth");
+        Assertions.assertEquals("Exploring Earth", driver.findElement(
+                By.cssSelector("[class*='popup-message']")).getText());
+    }
+
+    @Test
+    public void clickonDistanceTest()
+    {
+        driver.findElement(By.cssSelector("[aria-label='planets']")).click();
+
+        List<WebElement> planetList = driver.findElements(By.className("planet"));
+
+        for(WebElement planet : planetList){
+
+        }
+
+
+    }
+
+    @Test
+    public void findingDistanceTest() throws InterruptedException {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.findElement(By.cssSelector("[aria-label='planets']")).click();
+        var planetcards = driver.findElements(By.className("planet"));
+
+        for(WebElement plantcard: planetcards){
+            String distance= plantcard.findElement(By.className("distance")).getText();
+            //System.out.println(distance);
+            if(distance.equalsIgnoreCase("2,871,000,000 km")){
+                plantcard.findElement(By.className("v-btn__content")).click();
+            }
+
+            //WebElement popupMessage= driver.findElement(By.cssSelector("[class*='popup-message']"));
+           // WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+            //wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class*='popup-message']"))).getText();
+
+//            Assertions.assertEquals("Exploring Uranus",
+//                    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class*='popup-message']"))));
+        }
+        }
 
 
 
